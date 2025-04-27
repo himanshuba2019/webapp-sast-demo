@@ -9,5 +9,12 @@ pipeline {
 		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=infectedwebapp -Dsonar.organization=infectedwebapp -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=6535f35559dcc0ab8ef38234b138063be3a652da'
 			}
         } 
+        stage('RunSCAAnalysisUsingSnyk') {
+            steps {		
+				withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
+					sh 'mvn snyk:test -fn'
+				}
+			}
+    }	
   }
 }
